@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "prestart": "npm i",
     "start": "node main.js"
+  },
+  "dependencies": {
+    "curlrequest": "^1.0.1"
   }
 }
