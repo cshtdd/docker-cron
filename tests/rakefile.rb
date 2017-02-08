@@ -44,6 +44,25 @@ def delete_container_with_name(container_name)
     assert false == `docker ps`.include?(container_name)
 end
 
+task :test_list do
+    container_name = "random_container_#{rand(1000000)}"
+
+    Dir.chdir('..') do
+        assert false == `rake run[list]`.include?(container_name)
+    end
+
+    sh "docker run -d --rm --name #{container_name} nginx"
+    assert true == `docker ps`.include?(container_name)
+
+    begin
+        Dir.chdir('..') do
+            assert true == `rake run[list]`.include?(container_name)
+        end
+    ensure
+        delete_container_with_name container_name
+    end
+end
+
 task :test_run_container do
     delete_container_with_name "testnginxcontainer"
 

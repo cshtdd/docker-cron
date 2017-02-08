@@ -1,8 +1,12 @@
 task :run, [:task, :task_args] do |t, args|
     Dir.chdir('src') do
 
-        task_args_raw = args[:task_args]
+        task_args_raw = args[:task_args] || ""
         task_args_cleaned_up = task_args_raw.gsub('"', '\"')
+
+        if task_args_cleaned_up.strip != "" then
+            task_args_cleaned_up = "\"#{task_args_cleaned_up}\""
+        end
 
         # puts "task_args"
         # puts task_args_raw
@@ -13,7 +17,7 @@ task :run, [:task, :task_args] do |t, args|
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v "#{Dir.pwd}":/usr/src/app -w /usr/src/app \
             camilin87/docker-cron                        \
-            npm run #{args[:task]} "#{task_args_cleaned_up}"
+            npm run #{args[:task]} #{task_args_cleaned_up}
         }
     end
 end
