@@ -1,6 +1,11 @@
 # Docker-Cron  
 Container to run other containers as cron jobs  
 
+## Dev Requirements  
+- Docker
+- rake
+
+
 ## Building the Container  
 
     rake build_container
