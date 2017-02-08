@@ -5,6 +5,8 @@
   "scripts": {
     "prestart": "npm i",
     "list": "node list-containers.js",
+
+    "prepull": "npm i",
     "pull": "node pull-image.js"
   },
   "dependencies": {
