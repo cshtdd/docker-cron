@@ -11,16 +11,17 @@ if (!imageConfiguration.length){
 console.log("ImageConfiguration", imageConfiguration)
 
 
-// curl.request({
-//     "unix-socket": "/var/run/docker.sock",
-//     url: 'http:/v1.25/images/create?fromImage=' + imageConfiguration,
-//     method: "POST",
-//     headers: {"Content-Type": "application/json"},
-//     include: true
-// }, function(err, parts) {
-//     console.log("ERROR", err)
-//     console.log("RESPONSE")
-//     console.log(parts)
+curl.request({
+    "unix-socket": "/var/run/docker.sock",
+    url: 'http:/v1.26/containers/create?name=' + 'testnginxcontainer',
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    include: true,
+    data: imageConfiguration
+}, function(err, parts) {
+    if (err) throw err;
+    console.log("RESPONSE")
+    console.log(parts)
 
-//     console.log("Completed")
-// })
+    console.log("Completed")
+})
