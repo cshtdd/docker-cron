@@ -48,6 +48,7 @@ task :test_run_container do
     delete_container_with_name "testnginxcontainer"
 
     begin
+        # create a new container
         Dir.chdir('..') do
             containerInfo = %{
                 {
@@ -60,6 +61,23 @@ task :test_run_container do
             sh "rake run[run,'#{containerInfoArg}']"
         end
         assert true == `docker ps`.include?("testnginxcontainer")
+
+        sh "docker stop testnginxcontainer"
+
+        # # create a container when an existing one already exists
+        # Dir.chdir('..') do
+        #     containerInfo = %{
+        #         {
+        #             "Image": "nginx"
+        #         }
+        #     }
+
+        #     containerInfoArg = containerInfo.gsub("\n", "").strip()
+
+        #     sh "rake run[run,'#{containerInfoArg}']"
+        # end
+        # assert true == `docker ps`.include?("testnginxcontainer")
+
     ensure
         delete_container_with_name "testnginxcontainer"
     end
