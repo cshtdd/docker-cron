@@ -16,3 +16,9 @@ task :build_container do
       sh "docker build -t camilin87/docker-cron ."
     end
 end
+
+task :tests do
+    Dir.chdir('tests') do
+      sh "rake"
+    end
+end
