@@ -12,3 +12,7 @@ Container to run other containers as cron jobs
         -v "$PWD":/usr/src/app -w /usr/src/app \
         camilin87/docker-cron \
         npm start
+
+## Useful Resources  
+- https://nathanleclaire.com/blog/2015/11/12/using-curl-and-the-unix-socket-to-talk-to-the-docker-api/
+- https://docs.docker.com/engine/api/v1.25/
