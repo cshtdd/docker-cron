@@ -12,6 +12,8 @@ console.log("ImageConfiguration", imageConfiguration)
 
 var containerName = "testnginxcontainer"
 
+console.log("Create container ")
+
 curl.request({
     "unix-socket": "/var/run/docker.sock",
     url: `http:/v1.26/containers/create?name=${containerName}`,
