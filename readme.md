@@ -3,7 +3,7 @@ Container to run other containers as cron jobs
 
 ## Building the Container  
 
-    docker build -f Dockerfile -t camilin87/docker-cron .
+    rake build_container
 
 ## Running the script in the container  
 
