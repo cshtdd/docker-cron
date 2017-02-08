@@ -38,3 +38,9 @@ task :test_pull do
     end
     assert `docker image ls alpine:latest`.include?("alpine") == true
 end
+
+task :test_run_container do
+    # docker run --rm --name testnginx -d nginx
+    # docker stop testnginx
+    # docker ps
+end
