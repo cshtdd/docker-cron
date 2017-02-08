@@ -1,11 +1,12 @@
 var curl = require('curlrequest')
 
 
-console.log("List containers")
+console.log("Downloading image")
 
 curl.request({
     "unix-socket": "/var/run/docker.sock",
-    url: 'http:/v1.25/containers/json',
+    url: 'http:/v1.25/images/create?fromImage=node:4',
+    method: "POST",
     headers: {"Content-Type": "application/json"},
     include: true
 }, function(err, parts) {

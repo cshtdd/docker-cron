@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "prestart": "npm i",
-    "list": "node list-containers.js"
+    "list": "node list-containers.js",
+    "pull": "node pull-image.js"
   },
   "dependencies": {
     "curlrequest": "^1.0.1"
