@@ -18,6 +18,23 @@ task :default do
     puts "Integration Tests Complete"
 end
 
-task :test_images do
-    puts "test the images command"
+def assert(condition)
+    raise "ERROR: Expected condition to be true but received #{condition}" unless condition
+end
+
+task :test_pull do
+    sh "docker rmi alpine:latest" if `docker image ls alpine:latest`.include?("alpine")
+    assert `docker image ls alpine:latest`.include?("alpine") == false
+
+    # pulls a non-existent image
+    Dir.chdir('..') do
+        sh 'rake run[pull,"alpine"]'
+    end
+    assert `docker image ls alpine:latest`.include?("alpine") == true
+
+    # pulls an existent image
+    Dir.chdir('..') do
+        sh 'rake run[pull,"alpine"]'
+    end
+    assert `docker image ls alpine:latest`.include?("alpine") == true
 end
