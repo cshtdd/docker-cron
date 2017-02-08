@@ -7,7 +7,10 @@
     "list": "node list-containers.js",
 
     "prepull": "npm i",
-    "pull": "node pull-image.js"
+    "pull": "node pull-image.js",
+
+    "prerun": "npm i",
+    "run": "node run-container.js"
   },
   "dependencies": {
     "curlrequest": "^1.0.1"

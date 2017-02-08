@@ -44,6 +44,17 @@ task :test_run_container do
     assert false == `docker ps`.include?("testnginxcontainer")
 
     # docker run --rm --name testnginxcontainer -d nginx
+    Dir.chdir('..') do
+        containerInfo = %{
+        {
+            "Image": "nginx"
+        }
+        }
+
+        containerInfoArg = containerInfo.gsub("\n", "").strip()
+
+        sh "rake run[run,'#{containerInfoArg}']"
+    end
 
     `docker stop testnginxcontainer`
     assert false == `docker ps`.include?("testnginxcontainer")
