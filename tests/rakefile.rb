@@ -57,5 +57,5 @@ task :test_run_container do
     end
 
     `docker stop testnginxcontainer`
-    assert false == `docker ps`.include?("testnginxcontainer")
+    assert true == `docker ps`.include?("testnginxcontainer")
 end
