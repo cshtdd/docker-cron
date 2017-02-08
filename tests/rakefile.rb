@@ -24,23 +24,27 @@ end
 
 task :test_pull do
     sh "docker rmi alpine:latest" if `docker image ls alpine:latest`.include?("alpine")
-    assert `docker image ls alpine:latest`.include?("alpine") == false
+    assert false == `docker image ls alpine:latest`.include?("alpine")
 
     # pulls a non-existent image
     Dir.chdir('..') do
         sh 'rake run[pull,"alpine"]'
     end
-    assert `docker image ls alpine:latest`.include?("alpine") == true
+    assert true == `docker image ls alpine:latest`.include?("alpine")
 
     # pulls an existent image
     Dir.chdir('..') do
         sh 'rake run[pull,"alpine"]'
     end
-    assert `docker image ls alpine:latest`.include?("alpine") == true
+    assert true == `docker image ls alpine:latest`.include?("alpine")
 end
 
 task :test_run_container do
-    # docker run --rm --name testnginx -d nginx
-    # docker stop testnginx
-    # docker ps
+    `docker rm -f testnginxcontainer`
+    assert false == `docker ps`.include?("testnginxcontainer")
+
+    # docker run --rm --name testnginxcontainer -d nginx
+
+    `docker stop testnginxcontainer`
+    assert false == `docker ps`.include?("testnginxcontainer")
 end
