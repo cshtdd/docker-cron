@@ -18,9 +18,10 @@ curl.request({
     headers: {"Content-Type": "application/json"},
     include: true
 }, function(err, parts) {
-    console.log("ERROR", err)
+    if (err) throw err;
     console.log("RESPONSE")
     console.log(parts)
+
 
     console.log("Completed")
 })
