@@ -55,7 +55,8 @@ task :test_run_container do
 
         sh "rake run[run,'#{containerInfoArg}']"
     end
-
-    `docker stop testnginxcontainer`
     assert true == `docker ps`.include?("testnginxcontainer")
+
+    `docker rm -f testnginxcontainer`
+    assert false == `docker ps`.include?("testnginxcontainer")
 end
