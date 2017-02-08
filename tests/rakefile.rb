@@ -39,24 +39,28 @@ task :test_pull do
     assert true == `docker image ls alpine:latest`.include?("alpine")
 end
 
+def delete_container_with_name(container_name)
+    `docker rm -f #{container_name}`
+    assert false == `docker ps`.include?(container_name)
+end
+
 task :test_run_container do
-    `docker rm -f testnginxcontainer`
-    assert false == `docker ps`.include?("testnginxcontainer")
+    delete_container_with_name "testnginxcontainer"
 
-    # docker run --rm --name testnginxcontainer -d nginx
-    Dir.chdir('..') do
-        containerInfo = %{
-        {
-            "Image": "nginx"
-        }
-        }
+    begin
+        Dir.chdir('..') do
+            containerInfo = %{
+                {
+                    "Image": "nginx"
+                }
+            }
 
-        containerInfoArg = containerInfo.gsub("\n", "").strip()
+            containerInfoArg = containerInfo.gsub("\n", "").strip()
 
-        sh "rake run[run,'#{containerInfoArg}']"
+            sh "rake run[run,'#{containerInfoArg}']"
+        end
+        assert true == `docker ps`.include?("testnginxcontainer")
+    ensure
+        delete_container_with_name "testnginxcontainer"
     end
-    assert true == `docker ps`.include?("testnginxcontainer")
-
-    `docker rm -f testnginxcontainer`
-    assert false == `docker ps`.include?("testnginxcontainer")
 end
