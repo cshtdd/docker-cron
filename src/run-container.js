@@ -14,6 +14,45 @@ var containerName = "testnginxcontainer"
 
 console.log("Read all containers")
 
+function createContainerWithName(name){
+    console.log("Create container ", name)
+
+    curl.request({
+        "unix-socket": "/var/run/docker.sock",
+        url: `http:/v1.26/containers/create?name=${name}`,
+        method: "POST",
+        verbose: true,
+        headers: {"Content-Type": "application/json"},
+        data: imageConfiguration
+    }, function(err, parts) {
+        if (err) throw err
+        // console.log("RESPONSE")
+        // console.log(parts)
+
+        var containerInfo = JSON.parse(parts)
+        var containerId = containerInfo.Id
+        // console.log(containerInfo)
+        // console.log(containerId)
+
+        console.log("Starting container ", containerId)
+
+        curl.request({
+            "unix-socket": "/var/run/docker.sock",
+            url: `http:/v1.26/containers/${containerId}/start`,
+            method: "POST",
+            verbose: true,
+            headers: {"Content-Type": "application/json"},
+            include: true
+        }, function(err, parts){
+            if (err) throw err;
+            console.log("RESPONSE")
+            console.log(parts)
+
+            console.log("Completed")
+        })
+    })
+}
+
 curl.request({
     "unix-socket": "/var/run/docker.sock",
     url: 'http:/v1.25/containers/json?all=true',
@@ -44,80 +83,10 @@ curl.request({
         }, function(err, parts){
             if (err) throw err
 
-            console.log("Create container ", containerName)
-
-            curl.request({
-                "unix-socket": "/var/run/docker.sock",
-                url: `http:/v1.26/containers/create?name=${containerName}`,
-                method: "POST",
-                verbose: true,
-                headers: {"Content-Type": "application/json"},
-                data: imageConfiguration
-            }, function(err, parts) {
-                if (err) throw err
-                // console.log("RESPONSE")
-                // console.log(parts)
-
-                var containerInfo = JSON.parse(parts)
-                var containerId = containerInfo.Id
-                // console.log(containerInfo)
-                // console.log(containerId)
-
-                console.log("Starting container ", containerId)
-
-                curl.request({
-                    "unix-socket": "/var/run/docker.sock",
-                    url: `http:/v1.26/containers/${containerId}/start`,
-                    method: "POST",
-                    verbose: true,
-                    headers: {"Content-Type": "application/json"},
-                    include: true
-                }, function(err, parts){
-                    if (err) throw err;
-                    console.log("RESPONSE")
-                    console.log(parts)
-
-                    console.log("Completed")
-                })
-            })
+            createContainerWithName(containerName)
         })
     }
     else {
-        console.log("Create container ", containerName)
-
-        curl.request({
-            "unix-socket": "/var/run/docker.sock",
-            url: `http:/v1.26/containers/create?name=${containerName}`,
-            method: "POST",
-            verbose: true,
-            headers: {"Content-Type": "application/json"},
-            data: imageConfiguration
-        }, function(err, parts) {
-            if (err) throw err
-            // console.log("RESPONSE")
-            // console.log(parts)
-
-            var containerInfo = JSON.parse(parts)
-            var containerId = containerInfo.Id
-            // console.log(containerInfo)
-            // console.log(containerId)
-
-            console.log("Starting container ", containerId)
-
-            curl.request({
-                "unix-socket": "/var/run/docker.sock",
-                url: `http:/v1.26/containers/${containerId}/start`,
-                method: "POST",
-                verbose: true,
-                headers: {"Content-Type": "application/json"},
-                include: true
-            }, function(err, parts){
-                if (err) throw err;
-                console.log("RESPONSE")
-                console.log(parts)
-
-                console.log("Completed")
-            })
-        })
+        createContainerWithName(containerName)
     }
 })
