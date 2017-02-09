@@ -7,3 +7,5 @@ RUN /usr/src/install-dependencies.sh
 
 RUN mkdir -p /usr/src/app
 COPY . /usr/src/app
+
+ENV NPM_COMMAND='cron'
