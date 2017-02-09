@@ -64,7 +64,8 @@ task :test_list do
 end
 
 task :test_run_container do
-    delete_container_with_name "testnginxcontainer"
+    container_name = "tcn#{rand(1000000)}"
+    delete_container_with_name container_name
 
     begin
         # create a new container
@@ -77,11 +78,11 @@ task :test_run_container do
 
             containerInfoArg = containerInfo.gsub("\n", "").strip()
 
-            sh "rake run[run,'#{containerInfoArg}']"
+            sh "rake run[run,#{container_name},'#{containerInfoArg}']"
         end
-        assert true == `docker ps`.include?("testnginxcontainer")
+        assert true == `docker ps`.include?(container_name)
 
-        sh "docker stop testnginxcontainer"
+        sh "docker stop #{container_name}"
 
         # create a container when an existing one already exists
         Dir.chdir('..') do
@@ -93,11 +94,11 @@ task :test_run_container do
 
             containerInfoArg = containerInfo.gsub("\n", "").strip()
 
-            sh "rake run[run,'#{containerInfoArg}']"
+            sh "rake run[run,#{container_name},'#{containerInfoArg}']"
         end
-        assert true == `docker ps`.include?("testnginxcontainer")
+        assert true == `docker ps`.include?(container_name)
 
     ensure
-        delete_container_with_name "testnginxcontainer"
+        delete_container_with_name container_name
     end
 end

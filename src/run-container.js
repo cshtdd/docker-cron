@@ -1,16 +1,21 @@
 var curl = require('curlrequest')
 
-console.log("Run Container")
+console.log("Run Container", process.argv)
 
-var imageConfiguration = process.argv[2] || ""
+var containerName = ""
+
+if (process.argv.length >= 4){
+    containerName = process.argv[2] || ""
+    imageConfiguration = process.argv[3] || ""
+} else{
+    imageConfiguration = process.argv[2] || ""
+}
 
 if (!imageConfiguration.length){
     throw new Error("imageConfiguration argument missing")
 }
 
 console.log("ImageConfiguration", imageConfiguration)
-
-var containerName = "testnginxcontainer"
 
 console.log("Read all containers")
 
