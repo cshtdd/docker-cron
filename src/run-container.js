@@ -12,39 +12,112 @@ console.log("ImageConfiguration", imageConfiguration)
 
 var containerName = "testnginxcontainer"
 
-console.log("Create container ")
+console.log("Read all containers")
 
 curl.request({
     "unix-socket": "/var/run/docker.sock",
-    url: `http:/v1.26/containers/create?name=${containerName}`,
-    method: "POST",
+    url: 'http:/v1.25/containers/json?all=true',
     verbose: true,
-    headers: {"Content-Type": "application/json"},
-    data: imageConfiguration
+    headers: {"Content-Type": "application/json"}
 }, function(err, parts) {
-    if (err) throw err
+    if (err) throw err;
     // console.log("RESPONSE")
     // console.log(parts)
 
-    var containerInfo = JSON.parse(parts)
-    var containerId = containerInfo.Id
-    // console.log(containerInfo)
-    // console.log(containerId)
+    var allContainerInfo = JSON.parse(parts)
+    // console.log(allContainerInfo)
 
-    console.log("Starting container ", containerId)
+    var existingContainer = allContainerInfo
+        .find((x) => x.Names.find((n) => n == `/${containerName}`))
 
-    curl.request({
-        "unix-socket": "/var/run/docker.sock",
-        url: `http:/v1.26/containers/${containerId}/start`,
-        method: "POST",
-        verbose: true,
-        headers: {"Content-Type": "application/json"},
-        include: true
-    }, function(err, parts){
-        if (err) throw err;
-        console.log("RESPONSE")
-        console.log(parts)
+    if (existingContainer){
+        console.log(`Container ${containerName} Already Exist`)
 
-        console.log("Completed")
-    })
+        console.log("Delete Container ", existingContainer.Id)
+        curl.request({
+            "unix-socket": "/var/run/docker.sock",
+            url: `http:/v1.26/containers/${existingContainer.Id}?force=true`,
+            method: "DELETE",
+            verbose: true,
+            headers: {"Content-Type": "application/json"},
+            data: imageConfiguration
+        }, function(err, parts){
+            if (err) throw err
+
+            console.log("Create container ", containerName)
+
+            curl.request({
+                "unix-socket": "/var/run/docker.sock",
+                url: `http:/v1.26/containers/create?name=${containerName}`,
+                method: "POST",
+                verbose: true,
+                headers: {"Content-Type": "application/json"},
+                data: imageConfiguration
+            }, function(err, parts) {
+                if (err) throw err
+                // console.log("RESPONSE")
+                // console.log(parts)
+
+                var containerInfo = JSON.parse(parts)
+                var containerId = containerInfo.Id
+                // console.log(containerInfo)
+                // console.log(containerId)
+
+                console.log("Starting container ", containerId)
+
+                curl.request({
+                    "unix-socket": "/var/run/docker.sock",
+                    url: `http:/v1.26/containers/${containerId}/start`,
+                    method: "POST",
+                    verbose: true,
+                    headers: {"Content-Type": "application/json"},
+                    include: true
+                }, function(err, parts){
+                    if (err) throw err;
+                    console.log("RESPONSE")
+                    console.log(parts)
+
+                    console.log("Completed")
+                })
+            })
+        })
+    }
+    else {
+        console.log("Create container ", containerName)
+
+        curl.request({
+            "unix-socket": "/var/run/docker.sock",
+            url: `http:/v1.26/containers/create?name=${containerName}`,
+            method: "POST",
+            verbose: true,
+            headers: {"Content-Type": "application/json"},
+            data: imageConfiguration
+        }, function(err, parts) {
+            if (err) throw err
+            // console.log("RESPONSE")
+            // console.log(parts)
+
+            var containerInfo = JSON.parse(parts)
+            var containerId = containerInfo.Id
+            // console.log(containerInfo)
+            // console.log(containerId)
+
+            console.log("Starting container ", containerId)
+
+            curl.request({
+                "unix-socket": "/var/run/docker.sock",
+                url: `http:/v1.26/containers/${containerId}/start`,
+                method: "POST",
+                verbose: true,
+                headers: {"Content-Type": "application/json"},
+                include: true
+            }, function(err, parts){
+                if (err) throw err;
+                console.log("RESPONSE")
+                console.log(parts)
+
+                console.log("Completed")
+            })
+        })
+    }
 })
