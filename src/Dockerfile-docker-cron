@@ -1,0 +1,9 @@
+FROM camilin87/node-cron
+
+RUN mkdir -p /usr/src/
+COPY install-dependencies.sh /usr/src/
+RUN chmod +x /usr/src/install-dependencies.sh
+RUN /usr/src/install-dependencies.sh
+
+RUN mkdir -p /usr/src/app
+COPY . /usr/src/app
