@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prestart": "npm i",
+    "prelist": "npm i",
     "list": "node list-containers.js",
 
     "prepull": "npm i",
