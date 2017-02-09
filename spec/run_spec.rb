@@ -22,7 +22,7 @@ describe "run" do
         expect(`docker ps`).to include(@container_name)
     end
 
-    it "creates an existing one already exists" do
+    it "creates a container when an existing one already exists" do
         system("docker run -d --rm --name #{@container_name} nginx")
 
         containerInfo = %{
