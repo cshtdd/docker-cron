@@ -29,6 +29,8 @@ task :build_container do
     end
 end
 
+task :t => :test
+task :test => :tests
 task :tests do
     Dir.chdir('tests') do
       sh "rake"
