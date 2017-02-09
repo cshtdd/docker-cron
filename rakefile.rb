@@ -34,7 +34,5 @@ end
 task :t => :test
 task :test => :tests
 task :tests do
-    Dir.chdir('tests') do
-      sh "rake"
-    end
+    sh "rspec -fd"
 end

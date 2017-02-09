@@ -4,6 +4,7 @@ Container to run other containers as cron jobs
 ## Dev Requirements  
 - Docker
 - rake
+- rspec
 
 
 ## Building the Container  
