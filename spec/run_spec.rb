@@ -15,22 +15,20 @@ describe "run" do
                 "Image": "nginx"
             }
         }
-
-        system("rake run[run,#{@container_name},'#{containerInfo}']")
+        sh "rake run[run,#{@container_name},'#{containerInfo}']"
 
         expect(`docker ps`).to include(@container_name)
     end
 
     it "creates a container when an existing one already exists" do
-        system("docker run -d --rm --name #{@container_name} nginx")
+        sh "docker run -d --rm --name #{@container_name} nginx"
 
         containerInfo = build_container_info_arg %{
             {
                 "Image": "nginx"
             }
         }
-
-        system("rake run[run,#{@container_name},'#{containerInfo}']")
+        sh "rake run[run,#{@container_name},'#{containerInfo}']"
 
         expect(`docker ps`).to include(@container_name)
     end

@@ -6,3 +6,9 @@ end
 def build_container_info_arg(containerInfoJson)
     containerInfoJson.gsub("\n", "").strip()
 end
+
+def sh(command)
+    puts "sh #{command}"
+    result = system(command)
+    result
+end

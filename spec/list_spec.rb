@@ -14,7 +14,7 @@ describe "list" do
     end
 
     it "includes existing containers" do
-        system("docker run -d --rm --name #{@container_name} nginx")
+        sh "docker run -d --rm --name #{@container_name} nginx"
 
         expect(`docker ps`).to include(@container_name)
         expect(`rake run[list]`).to include(@container_name)
