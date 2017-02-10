@@ -20,6 +20,7 @@ describe "run propagates environment variables" do
     end
 
     before do
+        @container_name = "tcn#{rand(1000000)}"
         delete_environment_file()
 
         @env_var_name = "RANDOM_VAR"
@@ -29,11 +30,21 @@ describe "run propagates environment variables" do
 
     after do
         delete_environment_file()
+        delete_container_with_name @container_name
     end
 
     it "propagates variables from the environment file" do
         # emulate this with my code
         # expect(`docker run -e 'AAA=123' ubuntu printenv AAA`).to include("123")
+
+        # #not ready for primetime yet :(
+        # containerInfo = build_container_info_arg %{
+        #     {
+        #         "Image": "ubuntu",
+        #         "Cmd": "printenv #{@env_var_name}"
+        #     }
+        # }
+        # expect(`rake run[run,#{@container_name},'#{containerInfo}']`).to include(@env_var_value)
     end
 
     it "maintains variables from the container definition" do
