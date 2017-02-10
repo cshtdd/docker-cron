@@ -34,16 +34,12 @@ describe "run propagates environment variables" do
     end
 
     it "propagates variables from the environment file" do
-        # TODO remove the env variable definition
         containerInfo = build_container_info_arg %{
             {
                 "Image": "ubuntu",
                 "Cmd": [
                     "printenv",
                     "#{@env_var_name}"
-                ],
-                "Env": [
-                    "#{@env_var_name}=#{@env_var_value}"
                 ]
             }
         }
@@ -79,6 +75,19 @@ describe "run propagates environment variables" do
         expect(`rake run[run,#{@container_name},'#{containerInfo}']`).not_to include("EXPECTED_VALUE")
     end
 
-    it "overwrites variables from the container definition" do
+    it "Does not overwrite variables from the container definition" do
+        containerInfo = build_container_info_arg %{
+            {
+                "Image": "ubuntu",
+                "Cmd": [
+                    "printenv",
+                    "TEMP_VAR1"
+                ],
+                "Env": [
+                    "#{@env_var_name}=EXPECTED_VALUE"
+                ]
+            }
+        }
+        expect(`rake run[run,#{@container_name},'#{containerInfo}']`).to include("EXPECTED_VALUE")
     end
 end

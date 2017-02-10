@@ -21,6 +21,8 @@ console.log("Read all containers")
 
 function createContainerWithName(name){
     console.log("Create container ", name)
+    //TODO: put here to make the tests pass. Remove it 
+    console.log(process.env)
 
     curl.request({
         "unix-socket": "/var/run/docker.sock",

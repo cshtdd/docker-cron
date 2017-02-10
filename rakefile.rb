@@ -1,6 +1,7 @@
 task :run, [:task, :arg1, :arg2] do |t, args|
     container_name = ""
     task_args_raw = ""
+    env_file_arg = ""
 
     if args.to_hash().length >= 3 then
         container_name = args[:arg1] || ""
@@ -15,11 +16,17 @@ task :run, [:task, :arg1, :arg2] do |t, args|
     end
 
     Dir.chdir('src') do
+        ENV_FILE_NAME = ".env"
+
+        if File.file?(ENV_FILE_NAME) then
+            env_file_arg = "--env-file #{ENV_FILE_NAME}"
+        end
+
         sh %{
-            docker run -it --rm --name docker-cron       \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -v "#{Dir.pwd}":/usr/src/app -w /usr/src/app \
-            camilin87/docker-cron-api-test               \
+            docker run -it --rm --name docker-cron #{env_file_arg}            \
+            -v /var/run/docker.sock:/var/run/docker.sock                      \
+            -v "#{Dir.pwd}":/usr/src/app -w /usr/src/app                      \
+            camilin87/docker-cron-api-test                                    \
             npm run #{args[:task]} #{container_name} #{task_args_cleaned_up}
         }
     end
