@@ -9,8 +9,8 @@ def build_container_info_arg(containerInfoJson)
         .gsub(",", "\\,")
         .strip()
 
-    puts "DEBUG-CONTAINERINFO-JSON-ARG"
-    puts result
+    # puts "DEBUG-CONTAINERINFO-JSON-ARG"
+    # puts result
 
     result
 end

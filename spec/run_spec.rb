@@ -45,10 +45,10 @@ describe "run" do
         sh "rake run[run,'#{containerInfo}']"
 
         expect(`docker ps -a -q`).to satisfy do |v|
-            puts "DEBUG-V"
-            puts v.length
-            puts "DEBUG-PREV-LIST"
-            puts previous_container_list.length
+            # puts "DEBUG-V"
+            # puts v.length
+            # puts "DEBUG-PREV-LIST"
+            # puts previous_container_list.length
 
             v.length > previous_container_list.length
         end
