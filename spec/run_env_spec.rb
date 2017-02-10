@@ -34,23 +34,49 @@ describe "run propagates environment variables" do
     end
 
     it "propagates variables from the environment file" do
-        # emulate this with my code
-        # expect(`docker run -e 'AAA=123' ubuntu printenv AAA`).to include("123")
-
-        # #not ready for primetime yet :(
-        # containerInfo = build_container_info_arg %{
-        #     {
-        #         "Image": "ubuntu",
-        #         "Cmd": "printenv #{@env_var_name}"
-        #     }
-        # }
-        # expect(`rake run[run,#{@container_name},'#{containerInfo}']`).to include(@env_var_value)
+        # TODO remove the env variable definition
+        containerInfo = build_container_info_arg %{
+            {
+                "Image": "ubuntu",
+                "Cmd": [
+                    "printenv",
+                    "#{@env_var_name}"
+                ],
+                "Env": [
+                    "#{@env_var_name}=#{@env_var_value}"
+                ]
+            }
+        }
+        expect(`rake run[run,#{@container_name},'#{containerInfo}']`).to include(@env_var_value)
     end
 
     it "maintains variables from the container definition" do
+        containerInfo = build_container_info_arg %{
+            {
+                "Image": "ubuntu",
+                "Cmd": [
+                    "printenv",
+                    "TEMP_VAR1"
+                ],
+                "Env": [
+                    "TEMP_VAR1=EXPECTED_VALUE"
+                ]
+            }
+        }
+        expect(`rake run[run,#{@container_name},'#{containerInfo}']`).to include("EXPECTED_VALUE")
     end
 
     it "does not propagate variables that are not in the environment file" do
+        containerInfo = build_container_info_arg %{
+            {
+                "Image": "ubuntu",
+                "Cmd": [
+                    "printenv",
+                    "TEMP_VAR1"
+                ]
+            }
+        }
+        expect(`rake run[run,#{@container_name},'#{containerInfo}']`).not_to include("EXPECTED_VALUE")
     end
 
     it "overwrites variables from the container definition" do
