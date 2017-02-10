@@ -32,6 +32,8 @@ describe "run propagates environment variables" do
     end
 
     it "propagates variables from the environment file" do
+        # emulate this with my code
+        # expect(`docker run -e 'AAA=123' ubuntu printenv AAA`).to include("123")
     end
 
     it "maintains variables from the container definition" do
