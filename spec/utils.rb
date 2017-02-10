@@ -4,19 +4,13 @@ def delete_container_with_name(container_name)
 end
 
 def build_container_info_arg(containerInfoJson)
-    result = containerInfoJson
+    containerInfoJson
         .gsub("\n", "")
         .gsub(",", "\\,")
         .strip()
-
-    # puts "DEBUG-CONTAINERINFO-JSON-ARG"
-    # puts result
-
-    result
 end
 
 def sh(command)
     puts "sh #{command}"
-    result = system(command)
-    result
+    system(command)
 end

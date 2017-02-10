@@ -9,14 +9,6 @@ task :run, [:task, :arg1, :arg2] do |t, args|
         task_args_raw = args[:arg1] || ""
     end
 
-    # puts "RUN-DEBUG"
-    # puts "argsLength"
-    # puts args.to_hash().length
-    # puts "container_name"
-    # puts container_name
-    # puts "task_args_raw"
-    # puts task_args_raw
-
     task_args_cleaned_up = task_args_raw.gsub('"', '\"')
     if task_args_cleaned_up.strip != "" then
         task_args_cleaned_up = "\"#{task_args_cleaned_up}\""
