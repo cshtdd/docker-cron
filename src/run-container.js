@@ -3,19 +3,20 @@ var curl = require('curlrequest')
 console.log("Run Container", process.argv)
 
 var containerName = ""
+var imageConfigurationRaw = ""
 
 if (process.argv.length >= 4){
     containerName = process.argv[2] || ""
-    imageConfiguration = process.argv[3] || ""
+    imageConfigurationRaw = process.argv[3] || ""
 } else{
-    imageConfiguration = process.argv[2] || ""
+    imageConfigurationRaw = process.argv[2] || ""
 }
 
-if (!imageConfiguration.length){
-    throw new Error("imageConfiguration argument missing")
+if (!imageConfigurationRaw.length){
+    throw new Error("imageConfigurationRaw argument missing")
 }
 
-console.log("ImageConfiguration", imageConfiguration)
+console.log("ImageConfigurationRaw", imageConfigurationRaw)
 
 console.log("Read all containers")
 
@@ -89,10 +90,10 @@ curl.request({
         }, function(err, parts){
             if (err) throw err
 
-            createContainerWithName(containerName, imageConfiguration)
+            createContainerWithName(containerName, imageConfigurationRaw)
         })
     }
     else {
-        createContainerWithName(containerName, imageConfiguration)
+        createContainerWithName(containerName, imageConfigurationRaw)
     }
 })
