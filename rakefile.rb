@@ -41,6 +41,14 @@ end
 
 task :t => :test
 task :test => :tests
-task :tests do
+task :tests => [:test_unit, :test_int]
+
+task :test_unit do
+    Dir.chdir('src') do
+        sh "npm t"
+    end
+end
+
+task :test_int do
     sh "rspec -fd"
 end

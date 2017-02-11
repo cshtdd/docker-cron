@@ -3,16 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "pretest": "npm i",
+    "test": "jasmine",
+
     "prelist": "npm i",
     "list": "node list-containers.js",
-
     "prepull": "npm i",
     "pull": "node pull-image.js",
-
     "prerun": "npm i",
     "run": "node run-container.js"
   },
   "dependencies": {
-    "curlrequest": "^1.0.1"
+    "curlrequest": "^1.0.1",
+    "jasmine": "^2.5.3",
+    "rfr": "^1.2.3"
   }
 }
