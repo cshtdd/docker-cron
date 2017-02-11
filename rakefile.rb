@@ -2,6 +2,7 @@ task :run, [:task, :arg1, :arg2] do |t, args|
     container_name = ""
     task_args_raw = ""
     env_file_arg = ""
+    container_info_file_arg = ""
 
     if args.to_hash().length >= 3 then
         container_name = args[:arg1] || ""
@@ -17,9 +18,14 @@ task :run, [:task, :arg1, :arg2] do |t, args|
 
     Dir.chdir('src') do
         ENV_FILE_NAME = ".env"
+        CONTAINER_INFO_FILE_NAME = ".containerInfo.json"
 
         if File.file?(ENV_FILE_NAME) then
             env_file_arg = "--env-file #{ENV_FILE_NAME}"
+        end
+
+        if File.file?(CONTAINER_INFO_FILE_NAME) then
+            container_info_file_arg = "-v #{Dir.pwd}/#{CONTAINER_INFO_FILE_NAME}:/usr/src/containerInfo.json"
         end
 
         verbose(false) do
@@ -27,6 +33,7 @@ task :run, [:task, :arg1, :arg2] do |t, args|
                 docker run -it --rm --name docker-cron #{env_file_arg}            \
                 -v /var/run/docker.sock:/var/run/docker.sock                      \
                 -v "#{Dir.pwd}":/usr/src/app -w /usr/src/app                      \
+                #{container_info_file_arg}                                        \
                 camilin87/docker-cron-api-test                                    \
                 npm run --silent                                                  \
                 #{args[:task]} #{container_name} #{task_args_cleaned_up}
