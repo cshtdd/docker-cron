@@ -24,6 +24,10 @@ describe "run" do
         container_logs @container_name
     end
 
+    def run(container_info)
+        run_container_with_name(@container_name, container_info)
+    end
+
     before do
         @container_name = "tcn#{rand(1000000)}"
         delete_environment_file()
@@ -40,7 +44,8 @@ describe "run" do
 
     it "propagates variables from the environment file" do
         create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
-        containerInfo = build_container_info_arg %{
+
+        run %{
             {
                 "Image": "ubuntu",
                 "Cmd": [
@@ -50,15 +55,14 @@ describe "run" do
             }
         }
 
-        sh "rake run[run,#{@container_name},'#{containerInfo}']"
-
         expect(logs).to include(@env_var_value)
     end
 
     it "propagates variables with spaces" do
         create_environment_variable("TEST_VAR1", "this is a multiword value")
         create_environment_variable(COPY_ENV_VARS_SETTING, "#{@env_var_name},TEST_VAR1")
-        containerInfo = build_container_info_arg %{
+
+        run %{
             {
                 "Image": "ubuntu",
                 "Cmd": [
@@ -68,15 +72,14 @@ describe "run" do
             }
         }
 
-        sh "rake run[run,#{@container_name},'#{containerInfo}']"
-
         expect(logs).to include("this is a multiword value")
     end
 
     it "does not propagate variables not specified in #{COPY_ENV_VARS_SETTING}" do
         create_environment_variable("IGNORED_SETTING", "SHOULD_NOT_GET_COPIED")
         create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
-        containerInfo = build_container_info_arg %{
+
+        run %{
             {
                 "Image": "ubuntu",
                 "Cmd": [
@@ -86,14 +89,13 @@ describe "run" do
             }
         }
 
-        sh "rake run[run,#{@container_name},'#{containerInfo}']"
-
         expect(logs).not_to include("SHOULD_NOT_GET_COPIED")
     end
 
     it "maintains variables from the container definition" do
         create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
-        containerInfo = build_container_info_arg %{
+
+        run %{
             {
                 "Image": "ubuntu",
                 "Cmd": [
@@ -106,14 +108,13 @@ describe "run" do
             }
         }
 
-        sh "rake run[run,#{@container_name},'#{containerInfo}']"
-
         expect(logs).to include("EXPECTED_VALUE")
     end
 
     it "does not propagate variables that are not in the environment file" do
         create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
-        containerInfo = build_container_info_arg %{
+
+        run %{
             {
                 "Image": "ubuntu",
                 "Cmd": [
@@ -123,14 +124,13 @@ describe "run" do
             }
         }
 
-        sh "rake run[run,#{@container_name},'#{containerInfo}']"
-
         expect(logs).not_to include("EXPECTED_VALUE")
     end
 
     it "Does not overwrite variables from the container definition" do
         create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
-        containerInfo = build_container_info_arg %{
+
+        run %{
             {
                 "Image": "ubuntu",
                 "Cmd": [
@@ -142,8 +142,6 @@ describe "run" do
                 ]
             }
         }
-
-        sh "rake run[run,#{@container_name},'#{containerInfo}']"
 
         expect(logs).to include("EXPECTED_VALUE")
     end

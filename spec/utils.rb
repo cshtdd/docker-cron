@@ -18,3 +18,11 @@ def sh(command)
     puts "sh #{command}"
     system(command)
 end
+
+def run_nameless_container(container_info)
+    sh "rake run[run,'#{build_container_info_arg container_info}']"
+end
+
+def run_container_with_name(container_name, container_info)
+    sh "rake run[run,#{@container_name},'#{build_container_info_arg container_info}']"
+end

@@ -9,13 +9,16 @@ describe "run" do
         delete_container_with_name @container_name
     end
 
+    def run(container_info)
+        run_container_with_name(@container_name, container_info)
+    end
+
     it "creates a new container" do
-        containerInfo = build_container_info_arg %{
+        run %{
             {
                 "Image": "nginx"
             }
         }
-        sh "rake run[run,#{@container_name},'#{containerInfo}']"
 
         expect(`docker ps`).to include(@container_name)
     end
@@ -23,12 +26,11 @@ describe "run" do
     it "creates a container when an existing one already exists" do
         sh "docker run -d --rm --name #{@container_name} nginx"
 
-        containerInfo = build_container_info_arg %{
+        run %{
             {
                 "Image": "nginx"
             }
         }
-        sh "rake run[run,#{@container_name},'#{containerInfo}']"
 
         expect(`docker ps`).to include(@container_name)
     end
@@ -36,13 +38,12 @@ describe "run" do
     it "creates a container even when no name is provided" do
         previous_container_list = `docker ps -a -q`
 
-        containerInfo = build_container_info_arg %{
+        run_nameless_container %{
             {
                 "Image": "alpine",
                 "Cmd": "echo test"
             }
         }
-        sh "rake run[run,'#{containerInfo}']"
 
         expect(`docker ps -a -q`).to satisfy do |v|
             v.length > previous_container_list.length
