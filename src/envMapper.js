@@ -22,7 +22,7 @@ module.exports = {
     copyEnvVarsSetting = "COPY_ENV_VARS"
     */
 
-    copy: function(containerInfoEnv, processEnv, copyEnvVarsSetting){
+    copy: (containerInfoEnv, processEnv, copyEnvVarsSetting) => {
         if (!containerInfoEnv){
             containerInfoEnv = []
         }
@@ -34,6 +34,17 @@ module.exports = {
         if (!copyEnvVarsSetting){
             copyEnvVarsSetting = "COPY_ENV_VARS"
         }
+
+        if (copyEnvVarsSetting in processEnv){
+            (processEnv[copyEnvVarsSetting] || "")
+                .split(",")
+                .filter(varName => varName in processEnv)
+                .map(varName => `${varName}=${processEnv[varName]}`)
+                .forEach(envVarValue => {
+                    containerInfoEnv.push(envVarValue)
+                })
+        }
+
 
         return containerInfoEnv
     }
