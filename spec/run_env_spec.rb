@@ -55,6 +55,24 @@ describe "run" do
         expect(logs).to include(@env_var_value)
     end
 
+    it "propagates variables with spaces" do
+        create_environment_variable("TEST_VAR1", "this is a multiword value")
+        create_environment_variable(COPY_ENV_VARS_SETTING, "#{@env_var_name},TEST_VAR1")
+        containerInfo = build_container_info_arg %{
+            {
+                "Image": "ubuntu",
+                "Cmd": [
+                    "printenv",
+                    "TEST_VAR1"
+                ]
+            }
+        }
+
+        sh "rake run[run,#{@container_name},'#{containerInfo}']"
+
+        expect(logs).to include("this is a multiword value")
+    end
+
     it "does not propagate variables not specified in #{COPY_ENV_VARS_SETTING}" do
         create_environment_variable("IGNORED_SETTING", "SHOULD_NOT_GET_COPIED")
         create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
