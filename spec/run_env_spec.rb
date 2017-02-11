@@ -14,7 +14,7 @@ describe "run" do
     def create_environment_variable(name, value)
         Dir.chdir('src') do
             File.open(ENV_FILE_NAME, 'a') do |file|
-                file.write("#{name}=#{value}")
+                file.write("#{name}=#{value}\n")
             end
             expect(File.file?(ENV_FILE_NAME)).to eq true
         end
