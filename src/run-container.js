@@ -85,8 +85,7 @@ curl.request({
             url: `http:/v1.26/containers/${existingContainer.Id}?force=true`,
             method: "DELETE",
             verbose: true,
-            headers: {"Content-Type": "application/json"},
-            data: imageConfiguration
+            headers: {"Content-Type": "application/json"}
         }, function(err, parts){
             if (err) throw err
 
