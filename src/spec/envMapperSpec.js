@@ -37,6 +37,19 @@ describe("envMapper", () => {
         expect(envMapper.copy([], processEnv, "copy")).toEqual([])
     })
 
+    it ("trims variable names to copy", () => {
+        var processEnv = {
+            "copy": "var5, var2 , var1",
+            "var1": "value1",
+            "var2": "value2"
+        }
+
+        expect(envMapper.copy([], processEnv, "copy")).toEqual([
+            "var2=value2",
+            "var1=value1"
+        ])
+    })
+
     it ("does not copy non-existent variables specified to copy", () => {
         var processEnv = {
             "copy": "var5,var6,var1",
@@ -61,6 +74,41 @@ describe("envMapper", () => {
         expect(envMapper.copy([], processEnv, "copy")).toEqual([
             "var5=value5",
             "var7=value7"
+        ])
+    })
+
+    it ("copy maintains existing variables", () => {
+        var containerInfoEnv = [
+            "var6=value6",
+            "var7=value7"
+        ]
+
+        var processEnv = {
+            "copy": "var1,var2",
+            "var1": "value1",
+            "var2": "value2"
+        }
+
+        expect(envMapper.copy(containerInfoEnv, processEnv, "copy")).toEqual([
+            "var6=value6",
+            "var7=value7",
+            "var1=value1",
+            "var2=value2"
+        ])
+    })
+
+    it ("does not overwrite variables from the container definition", () => {
+        var containerInfoEnv = [
+            "var1=existingValue"
+        ]
+
+        var processEnv = {
+            "copy": "var1",
+            "var1": "newValue"
+        }
+
+        expect(envMapper.copy(containerInfoEnv, processEnv, "copy")).toEqual([
+            "var1=existingValue"
         ])
     })
 })

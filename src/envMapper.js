@@ -38,7 +38,9 @@ module.exports = {
         if (copyEnvVarsSetting in processEnv){
             (processEnv[copyEnvVarsSetting] || "")
                 .split(",")
+                .map(varName => varName.trim())
                 .filter(varName => varName in processEnv)
+                .filter(varName => !containerInfoEnv.join(",").includes(`${varName}=`))
                 .map(varName => `${varName}=${processEnv[varName]}`)
                 .forEach(envVarValue => {
                     containerInfoEnv.push(envVarValue)
