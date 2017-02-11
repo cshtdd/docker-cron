@@ -20,6 +20,10 @@ describe "run" do
         end
     end
 
+    def logs
+        container_logs @container_name
+    end
+
     before do
         @container_name = "tcn#{rand(1000000)}"
         delete_environment_file()
@@ -48,7 +52,7 @@ describe "run" do
 
         sh "rake run[run,#{@container_name},'#{containerInfo}']"
 
-        expect(`docker logs #{@container_name}`).to include(@env_var_value)
+        expect(logs).to include(@env_var_value)
     end
 
     it "does not propagate variables not specified in #{COPY_ENV_VARS_SETTING}" do
@@ -66,7 +70,7 @@ describe "run" do
 
         sh "rake run[run,#{@container_name},'#{containerInfo}']"
 
-        expect(`docker logs #{@container_name}`).not_to include("SHOULD_NOT_GET_COPIED")
+        expect(logs).not_to include("SHOULD_NOT_GET_COPIED")
     end
 
     it "maintains variables from the container definition" do
@@ -86,7 +90,7 @@ describe "run" do
 
         sh "rake run[run,#{@container_name},'#{containerInfo}']"
 
-        expect(`docker logs #{@container_name}`).to include("EXPECTED_VALUE")
+        expect(logs).to include("EXPECTED_VALUE")
     end
 
     it "does not propagate variables that are not in the environment file" do
@@ -103,7 +107,7 @@ describe "run" do
 
         sh "rake run[run,#{@container_name},'#{containerInfo}']"
 
-        expect(`docker logs #{@container_name}`).not_to include("EXPECTED_VALUE")
+        expect(logs).not_to include("EXPECTED_VALUE")
     end
 
     it "Does not overwrite variables from the container definition" do
@@ -123,6 +127,6 @@ describe "run" do
 
         sh "rake run[run,#{@container_name},'#{containerInfo}']"
 
-        expect(`docker logs #{@container_name}`).to include("EXPECTED_VALUE")
+        expect(logs).to include("EXPECTED_VALUE")
     end
 end
