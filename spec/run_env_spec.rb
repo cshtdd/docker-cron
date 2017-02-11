@@ -46,9 +46,9 @@ describe "run" do
             }
         }
 
-        output = `rake run[run,#{@container_name},'#{containerInfo}']`
-        puts output
-        expect(output).to include(@env_var_value)
+        sh "rake run[run,#{@container_name},'#{containerInfo}']"
+
+        expect(`docker logs #{@container_name}`).to include(@env_var_value)
     end
 
     it "does not propagate variables not specified in #{COPY_ENV_VARS_SETTING}" do
@@ -64,7 +64,9 @@ describe "run" do
             }
         }
 
-        expect(`rake run[run,#{@container_name},'#{containerInfo}']`).not_to include("SHOULD_NOT_GET_COPIED")
+        sh "rake run[run,#{@container_name},'#{containerInfo}']"
+
+        expect(`docker logs #{@container_name}`).not_to include("SHOULD_NOT_GET_COPIED")
     end
 
     it "maintains variables from the container definition" do
@@ -81,7 +83,10 @@ describe "run" do
                 ]
             }
         }
-        expect(`rake run[run,#{@container_name},'#{containerInfo}']`).to include("EXPECTED_VALUE")
+
+        sh "rake run[run,#{@container_name},'#{containerInfo}']"
+
+        expect(`docker logs #{@container_name}`).to include("EXPECTED_VALUE")
     end
 
     it "does not propagate variables that are not in the environment file" do
@@ -95,7 +100,10 @@ describe "run" do
                 ]
             }
         }
-        expect(`rake run[run,#{@container_name},'#{containerInfo}']`).not_to include("EXPECTED_VALUE")
+
+        sh "rake run[run,#{@container_name},'#{containerInfo}']"
+
+        expect(`docker logs #{@container_name}`).not_to include("EXPECTED_VALUE")
     end
 
     it "Does not overwrite variables from the container definition" do
@@ -105,13 +113,16 @@ describe "run" do
                 "Image": "ubuntu",
                 "Cmd": [
                     "printenv",
-                    "TEMP_VAR1"
+                    "#{@env_var_name}"
                 ],
                 "Env": [
                     "#{@env_var_name}=EXPECTED_VALUE"
                 ]
             }
         }
-        expect(`rake run[run,#{@container_name},'#{containerInfo}']`).to include("EXPECTED_VALUE")
+
+        sh "rake run[run,#{@container_name},'#{containerInfo}']"
+
+        expect(`docker logs #{@container_name}`).to include("EXPECTED_VALUE")
     end
 end
