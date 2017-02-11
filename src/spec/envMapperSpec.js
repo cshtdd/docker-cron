@@ -2,9 +2,7 @@ var rfr = require("rfr")
 var envMapper = rfr("envMapper.js")
 
 describe("envMapper", () => {
-    it("returns lolo by default", () => {
-        expect(envMapper.copy()).toBe("lolo")
+    it("returns an empty array by default", () => {
+        expect(envMapper.copy()).toEqual([])
     })
-
-    
 })

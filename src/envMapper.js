@@ -35,6 +35,6 @@ module.exports = {
             copyEnvVarsSetting = "COPY_ENV_VARS"
         }
 
-        return "lolo"
+        return containerInfoEnv
     }
 }
