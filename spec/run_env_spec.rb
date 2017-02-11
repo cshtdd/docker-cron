@@ -2,6 +2,7 @@ require 'utils'
 
 describe "run propagates environment variables" do
     ENV_FILE_NAME = ".env"
+    COPY_ENV_VARS_SETTING = "COPY_ENV_VARS"
 
     def delete_environment_file()
         Dir.chdir('src') do
@@ -12,7 +13,7 @@ describe "run propagates environment variables" do
 
     def create_environment_variable(name, value)
         Dir.chdir('src') do
-            File.open(ENV_FILE_NAME, 'w') do |file|
+            File.open(ENV_FILE_NAME, 'a') do |file|
                 file.write("#{name}=#{value}")
             end
             expect(File.file?(ENV_FILE_NAME)).to eq true
@@ -34,6 +35,7 @@ describe "run propagates environment variables" do
     end
 
     it "propagates variables from the environment file" do
+        create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
         containerInfo = build_container_info_arg %{
             {
                 "Image": "ubuntu",
@@ -43,10 +45,30 @@ describe "run propagates environment variables" do
                 ]
             }
         }
-        expect(`rake run[run,#{@container_name},'#{containerInfo}']`).to include(@env_var_value)
+
+        output = `rake run[run,#{@container_name},'#{containerInfo}']`
+        puts output
+        expect(output).to include(@env_var_value)
+    end
+
+    it "does not propagate variables not specified in #{COPY_ENV_VARS_SETTING}" do
+        create_environment_variable("IGNORED_SETTING", "SHOULD_NOT_GET_COPIED")
+        create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
+        containerInfo = build_container_info_arg %{
+            {
+                "Image": "ubuntu",
+                "Cmd": [
+                    "printenv",
+                    "IGNORED_SETTING"
+                ]
+            }
+        }
+
+        expect(`rake run[run,#{@container_name},'#{containerInfo}']`).not_to include("SHOULD_NOT_GET_COPIED")
     end
 
     it "maintains variables from the container definition" do
+        create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
         containerInfo = build_container_info_arg %{
             {
                 "Image": "ubuntu",
@@ -63,6 +85,7 @@ describe "run propagates environment variables" do
     end
 
     it "does not propagate variables that are not in the environment file" do
+        create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
         containerInfo = build_container_info_arg %{
             {
                 "Image": "ubuntu",
@@ -76,6 +99,7 @@ describe "run propagates environment variables" do
     end
 
     it "Does not overwrite variables from the container definition" do
+        create_environment_variable(COPY_ENV_VARS_SETTING, @env_var_name)
         containerInfo = build_container_info_arg %{
             {
                 "Image": "ubuntu",
