@@ -18,7 +18,7 @@ task :run, [:task, :arg1, :arg2] do |t, args|
 
     Dir.chdir('src') do
         ENV_FILE_NAME = ".env"
-        CONTAINER_INFO_FILE_NAME = ".containerInfo.json"
+        CONTAINER_INFO_FILE_NAME = "containerInfo.json"
 
         if File.file?(ENV_FILE_NAME) then
             env_file_arg = "--env-file #{ENV_FILE_NAME}"
