@@ -1,6 +1,6 @@
 require 'utils'
 
-describe "run propagates environment variables" do
+describe "run" do
     ENV_FILE_NAME = ".env"
     COPY_ENV_VARS_SETTING = "COPY_ENV_VARS"
 
