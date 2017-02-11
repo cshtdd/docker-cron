@@ -2,8 +2,8 @@
 Container to run other containers as cron jobs  
 
 ## Dev Requirements  
-- Docker running in Swarm mode  
-    `docker swarm init`
+- Docker
+- node
 - rake
     `gem install rake`
 - rspec
