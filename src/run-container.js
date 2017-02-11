@@ -19,7 +19,7 @@ console.log("ImageConfiguration", imageConfiguration)
 
 console.log("Read all containers")
 
-function createContainerWithName(name){
+function createContainerWithName(name, containerData){
     console.log("Create container ", name)
     //TODO: put here to make the tests pass. Remove it 
     // console.log(process.env)
@@ -30,7 +30,7 @@ function createContainerWithName(name){
         method: "POST",
         verbose: true,
         headers: {"Content-Type": "application/json"},
-        data: imageConfiguration
+        data: containerData
     }, function(err, parts) {
         if (err) throw err
         // console.log("RESPONSE")
@@ -90,10 +90,10 @@ curl.request({
         }, function(err, parts){
             if (err) throw err
 
-            createContainerWithName(containerName)
+            createContainerWithName(containerName, imageConfiguration)
         })
     }
     else {
-        createContainerWithName(containerName)
+        createContainerWithName(containerName, imageConfiguration)
     }
 })
