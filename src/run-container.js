@@ -1,6 +1,7 @@
 var curl = require('curlrequest')
 
-console.log("Run Container", process.argv)
+// console.log("Run Container", process.argv)
+console.log("Run Container")
 
 var containerName = ""
 var imageConfigurationRaw = ""
@@ -16,7 +17,7 @@ if (!imageConfigurationRaw.length){
     throw new Error("imageConfigurationRaw argument missing")
 }
 
-console.log("ImageConfigurationRaw", imageConfigurationRaw)
+// console.log("ImageConfigurationRaw", imageConfigurationRaw)
 
 console.log("Read all containers")
 
