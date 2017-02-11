@@ -1,3 +1,5 @@
+var rfr = require("rfr")
+var envMapper = rfr("envMapper.js")
 var curl = require('curlrequest')
 
 // console.log("Run Container", process.argv)
@@ -18,6 +20,13 @@ if (!imageConfigurationRaw.length){
 }
 
 // console.log("ImageConfigurationRaw", imageConfigurationRaw)
+
+var imageConfigurationObj = JSON.parse(imageConfigurationRaw)
+imageConfigurationObj.Env = imageConfigurationObj.Env || []
+imageConfigurationObj.Env = envMapper.copy(imageConfigurationObj.Env)
+var imageConfiguration = JSON.stringify(imageConfigurationObj)
+
+// console.log("ImageConfiguration", imageConfiguration)
 
 console.log("Read all containers")
 
@@ -91,10 +100,10 @@ curl.request({
         }, function(err, parts){
             if (err) throw err
 
-            createContainerWithName(containerName, imageConfigurationRaw)
+            createContainerWithName(containerName, imageConfiguration)
         })
     }
     else {
-        createContainerWithName(containerName, imageConfigurationRaw)
+        createContainerWithName(containerName, imageConfiguration)
     }
 })
