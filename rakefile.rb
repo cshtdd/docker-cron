@@ -22,13 +22,16 @@ task :run, [:task, :arg1, :arg2] do |t, args|
             env_file_arg = "--env-file #{ENV_FILE_NAME}"
         end
 
-        sh %{
-            docker run -it --rm --name docker-cron #{env_file_arg}            \
-            -v /var/run/docker.sock:/var/run/docker.sock                      \
-            -v "#{Dir.pwd}":/usr/src/app -w /usr/src/app                      \
-            camilin87/docker-cron-api-test                                    \
-            npm run #{args[:task]} #{container_name} #{task_args_cleaned_up}
-        }
+        verbose(false) do
+            sh %{
+                docker run -it --rm --name docker-cron #{env_file_arg}            \
+                -v /var/run/docker.sock:/var/run/docker.sock                      \
+                -v "#{Dir.pwd}":/usr/src/app -w /usr/src/app                      \
+                camilin87/docker-cron-api-test                                    \
+                npm run --silent                                                  \
+                #{args[:task]} #{container_name} #{task_args_cleaned_up}
+            }
+        end
     end
 end
 
