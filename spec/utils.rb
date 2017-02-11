@@ -44,3 +44,5 @@ class Env
         end
     end
 end
+
+COPY_ENV_VARS_SETTING = "COPY_ENV_VARS"

@@ -1,8 +1,6 @@
 require 'utils'
 
 describe "run" do
-    COPY_ENV_VARS_SETTING = "COPY_ENV_VARS"
-
     def logs
         container_logs @container_name
     end
