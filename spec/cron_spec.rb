@@ -41,7 +41,7 @@ describe "cron" do
 
         cron %{
             {
-                "Image": "ubuntu",
+                "Image": "ubuntu:latest",
                 "Name": "#{@cron_container_name}",
                 "Cmd": [
                     "printenv",

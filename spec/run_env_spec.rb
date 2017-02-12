@@ -28,7 +28,7 @@ describe "run" do
 
         run %{
             {
-                "Image": "ubuntu",
+                "Image": "ubuntu:latest",
                 "Cmd": [
                     "printenv",
                     "#{@env_var_name}"
@@ -45,7 +45,7 @@ describe "run" do
 
         run %{
             {
-                "Image": "ubuntu",
+                "Image": "ubuntu:latest",
                 "Cmd": [
                     "printenv",
                     "TEST_VAR1"
@@ -62,7 +62,7 @@ describe "run" do
 
         run %{
             {
-                "Image": "ubuntu",
+                "Image": "ubuntu:latest",
                 "Cmd": [
                     "printenv",
                     "IGNORED_SETTING"
@@ -78,7 +78,7 @@ describe "run" do
 
         run %{
             {
-                "Image": "ubuntu",
+                "Image": "ubuntu:latest",
                 "Cmd": [
                     "printenv",
                     "TEMP_VAR1"
@@ -97,7 +97,7 @@ describe "run" do
 
         run %{
             {
-                "Image": "ubuntu",
+                "Image": "ubuntu:latest",
                 "Cmd": [
                     "printenv",
                     "TEMP_VAR1"
@@ -113,7 +113,7 @@ describe "run" do
 
         run %{
             {
-                "Image": "ubuntu",
+                "Image": "ubuntu:latest",
                 "Cmd": [
                     "printenv",
                     "#{@env_var_name}"

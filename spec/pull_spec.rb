@@ -18,6 +18,12 @@ describe "pull" do
 
             expect(`docker image ls alpine:latest`).to include("alpine")
         end
+
+        it "pulls an existent image non-deleted" do
+            sh 'rake run[pull,"ubuntu:latest"]'
+
+            expect(`docker image ls ubuntu:latest`).to include("ubuntu")
+        end
     end
 
     describe "error" do

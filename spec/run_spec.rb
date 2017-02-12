@@ -16,7 +16,7 @@ describe "run" do
     it "creates a new container" do
         run %{
             {
-                "Image": "nginx"
+                "Image": "nginx:latest"
             }
         }
 
@@ -28,7 +28,7 @@ describe "run" do
 
         run %{
             {
-                "Image": "nginx"
+                "Image": "nginx:latest"
             }
         }
 
