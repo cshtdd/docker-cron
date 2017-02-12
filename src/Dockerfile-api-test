@@ -1,6 +1,5 @@
 FROM ubuntu
 
-RUN mkdir -p /usr/src/
-COPY install-dependencies.sh /usr/src/
-RUN chmod +x /usr/src/install-dependencies.sh
-RUN /usr/src/install-dependencies.sh
+RUN apt-get update && apt-get install curl -y
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get install -y nodejs

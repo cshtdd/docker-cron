@@ -1,9 +1,6 @@
-FROM camilin87/node-cron
+FROM camilin87/node-cron:latest
 
-RUN mkdir -p /usr/src/
-COPY install-dependencies.sh /usr/src/
-RUN chmod +x /usr/src/install-dependencies.sh
-RUN /usr/src/install-dependencies.sh
+RUN apt-get update && apt-get install curl -y
 
 RUN mkdir -p /usr/src/app
 COPY . /usr/src/app
