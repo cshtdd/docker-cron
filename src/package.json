@@ -10,8 +10,12 @@
     "list": "node list-containers.js",
     "prepull": "npm i",
     "pull": "node pull-image.js",
+
     "prerun": "npm i",
-    "run": "node run-container.js"
+    "run": "node run-container.js",
+
+    "precron": "npm i",
+    "cron": "node run-cron.js"
   },
   "dependencies": {
     "curlrequest": "^1.0.1",
