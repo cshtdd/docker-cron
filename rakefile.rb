@@ -44,8 +44,23 @@ end
 
 task :build_container do
     Dir.chdir('src') do
-      sh "docker build --no-cache -f Dockerfile-api-test -t camilin87/docker-cron-api-test ."
-      sh "docker build --no-cache -f Dockerfile-docker-cron -t camilin87/docker-cron ."
+        sh "docker build --no-cache -f Dockerfile-api-test -t camilin87/docker-cron-api-test ."
+
+        begin
+            File.open(".dockerignore", 'w') do |file|
+                ignore_file_lines = [
+                    "spec*",
+                    "node_modules*",
+                    "Dockerfile*"
+                ]
+                ignore_file_lines.each do |line|
+                    file.write("#{line}\n")
+                end
+            end
+            sh "docker build --no-cache -f Dockerfile-docker-cron -t camilin87/docker-cron ." 
+        ensure
+            `rm -f .dockerignore`
+        end
     end
 end
 
