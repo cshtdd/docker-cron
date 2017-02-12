@@ -62,3 +62,12 @@ end
 task :test_int do
     sh "rspec -fd"
 end
+
+task :c => :clear
+task :clear do
+    running_containers = `docker ps -a -q`
+    if running_containers.length > 0 then
+        `docker rm -f #{running_containers}`
+    end
+    `rm -Rf gen_*`
+end
