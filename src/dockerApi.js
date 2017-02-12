@@ -1,13 +1,18 @@
 var curl = require('curlrequest')
 
+function apiRequest(data, callback){
+    data.verbose = true
+    data.headers = {"Content-Type": "application/json"}
+    data["unix-socket"] = "/var/run/docker.sock"
+
+    curl.request(data, callback)
+}
+
 module.exports = {
     pullImage: (name, callback) => {
-        curl.request({
-            "unix-socket": "/var/run/docker.sock",
+        apiRequest({
             url: `http:/v1.25/images/create?fromImage=${name}`,
             method: "POST",
-            verbose: true,
-            headers: {"Content-Type": "application/json"},
             include: true
         }, callback)
     },
@@ -18,11 +23,8 @@ module.exports = {
             allParam = "?all=true"
         }
 
-        curl.request({
-            "unix-socket": "/var/run/docker.sock",
-            url: `http:/v1.25/containers/json${allParam}`,
-            verbose: true,
-            headers: {"Content-Type": "application/json"}
+        apiRequest({
+            url: `http:/v1.25/containers/json${allParam}`
         }, callback)
     },
 
@@ -32,23 +34,17 @@ module.exports = {
             nameArg = `name=${name}`
         }
 
-        curl.request({
-            "unix-socket": "/var/run/docker.sock",
+        apiRequest({
             url: `http:/v1.26/containers/create?${nameArg}`,
             method: "POST",
-            verbose: true,
-            headers: {"Content-Type": "application/json"},
             data: data
         }, callback)
     },
 
     start: (containerId, callback) => {
-        curl.request({
-            "unix-socket": "/var/run/docker.sock",
+        apiRequest({
             url: `http:/v1.26/containers/${containerId}/start`,
             method: "POST",
-            verbose: true,
-            headers: {"Content-Type": "application/json"},
             include: true
         }, callback)
     },
@@ -59,12 +55,9 @@ module.exports = {
             forceParam = "force=true"
         }
 
-        curl.request({
-            "unix-socket": "/var/run/docker.sock",
+        apiRequest({
             url: `http:/v1.26/containers/${containerId}?${forceParam}`,
-            method: "DELETE",
-            verbose: true,
-            headers: {"Content-Type": "application/json"}
+            method: "DELETE"
         }, callback)
     }
 }
