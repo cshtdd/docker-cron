@@ -1,6 +1,6 @@
 var rfr = require("rfr")
 var envMapper = rfr("envMapper")
-var dockerApi = rfr("dockerApi")
+var dockerApi = rfr("dockerApiPromise")
 
 module.exports = {
     exec: function(containerName, imageConfigurationRaw){
@@ -21,59 +21,60 @@ module.exports = {
 
         function createContainerWithName(name, containerData){
             console.log("Create container ", name)
-            //TODO: put here to make the tests pass. Remove it 
-            // console.log(process.env)
 
-            dockerApi.create(name, containerData, function(err, parts) {
-                if (err) {
+            dockerApi.create(name, containerData)
+                .then(parts => {
+                    // console.log("RESPONSE")
+                    // console.log(parts)
+
+                    var containerInfo = JSON.parse(parts)
+                    var containerId = containerInfo.Id
+                    // console.log(containerInfo)
+                    // console.log(containerId)
+
+                    console.log("Starting container ", containerId)
+
+                    dockerApi.start(containerId)
+                        .then(parts => {
+                            console.log("RESPONSE")
+                            console.log(parts)
+
+                            console.log("Completed")
+                        }, err => {
+                            throw err
+                        })
+                }, err => {
                     throw err
-                }
+                })
+        }
+
+        dockerApi.list(true)
+            .then(parts => {
                 // console.log("RESPONSE")
                 // console.log(parts)
 
-                var containerInfo = JSON.parse(parts)
-                var containerId = containerInfo.Id
-                // console.log(containerInfo)
-                // console.log(containerId)
+                var allContainerInfo = JSON.parse(parts)
+                // console.log(allContainerInfo)
 
-                console.log("Starting container ", containerId)
+                var existingContainer = allContainerInfo
+                    .find((x) => x.Names.find((n) => n == `/${containerName}`))
 
-                dockerApi.start(containerId, function(err, parts){
-                    if (err) throw err;
-                    console.log("RESPONSE")
-                    console.log(parts)
+                if (existingContainer){
+                    console.log(`Container ${containerName} Already Exist`)
 
-                    console.log("Completed")
-                })
-            })
-        }
-
-        dockerApi.list(true, function(err, parts) {
-            if (err) {
-                throw err
-            }
-            // console.log("RESPONSE")
-            // console.log(parts)
-
-            var allContainerInfo = JSON.parse(parts)
-            // console.log(allContainerInfo)
-
-            var existingContainer = allContainerInfo
-                .find((x) => x.Names.find((n) => n == `/${containerName}`))
-
-            if (existingContainer){
-                console.log(`Container ${containerName} Already Exist`)
-
-                console.log("Delete Container ", existingContainer.Id)
-                dockerApi.delete(existingContainer.Id, true, function(err, parts){
-                    if (err) throw err
-
+                    console.log("Delete Container ", existingContainer.Id)
+                    dockerApi.delete(existingContainer.Id, true)
+                        .then(parts => {
+                            createContainerWithName(containerName, imageConfiguration)
+                        }, err => {
+                            throw err
+                        })
+                }
+                else {
                     createContainerWithName(containerName, imageConfiguration)
-                })
-            }
-            else {
-                createContainerWithName(containerName, imageConfiguration)
-            }
-        })
+                }
+            }, err => {
+                throw err
+            })
     }
 }
