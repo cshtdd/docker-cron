@@ -7,15 +7,15 @@
     "test": "jasmine",
 
     "prelist": "npm i",
-    "list": "node list-containers.js",
+    "list": "node npm-cmd-list-containers.js",
     "prepull": "npm i",
-    "pull": "node pull-image.js",
+    "pull": "node npm-cmd-pull-image.js",
 
     "prerun": "npm i",
-    "run": "node run-container.js",
+    "run": "node npm-cmd-run-container.js",
 
     "precron": "npm i",
-    "cron": "node run-cron.js"
+    "cron": "node npm-cmd-run-cron.js"
   },
   "dependencies": {
     "curlrequest": "^1.0.1",
