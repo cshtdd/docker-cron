@@ -2,17 +2,10 @@ require 'utils'
 
 describe "cron" do
     CONTAINER_INFO_FILE_NAME = "containerInfo.json"
-    CRON_LOG_FILE_NAME = "cron.log"
 
     def delete_container_info_file
         Dir.chdir('src') do
             `rm -f #{CONTAINER_INFO_FILE_NAME}`
-        end
-    end
-
-    def delete_cron_log
-        Dir.chdir('src') do
-            `rm -f #{CRON_LOG_FILE_NAME}`
         end
     end
 
@@ -26,24 +19,21 @@ describe "cron" do
         sh "rake run[cron]"
     end
 
+    def logs
+        container_logs @cron_container_name
+    end
+
     before do
         @env_var_value = "value_test_#{rand(100000)}"
+        @cron_container_name = "tcn_cron_#{rand(1000000)}"
 
         delete_container_info_file
-        delete_cron_log
     end
 
     after do
         delete_container_info_file
-        delete_cron_log
+        delete_container_with_name @cron_container_name
     end
-
-    # generate environment file
-    # generate src/.containerInfo.json
-    # sh "rake run[cron,'#{build_container_info_arg container_info}']"
-    # not sure how to validate the logs
-    #   make the cron container write printenv VAR1 to /usr/src/app/cron.log
-    #   validate src/cron.log
 
     it "runs the container" do
         Env.create_environment_variable("VAR1", @env_var_value)
@@ -52,17 +42,14 @@ describe "cron" do
         cron %{
             {
                 "Image": "ubuntu",
+                "Name": "#{@cron_container_name}",
                 "Cmd": [
                     "printenv",
-                    "VAR1",
-                    ">",
-                    "/usr/src/app/#{CRON_LOG_FILE_NAME}"
+                    "VAR1"
                 ]
             }
         }
 
-        Dir.chdir('src') do
-            expect(`cat #{CRON_LOG_FILE_NAME}`).to include(@env_var_value)
-        end
+        expect(logs).to include(@env_var_value)
     end
 end

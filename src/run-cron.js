@@ -6,12 +6,12 @@ var runContainerService = rfr("runContainerService.js")
 console.log("Run Cron")
 
 fs.readFile("/usr/src/containerInfo.json", "utf8",  (err, imageConfigurationRaw) => {
-    // console.log("readFile")
-    // console.log(err)
-    // console.log(imageConfigurationRaw)
-
     if (err) {
         throw err
     }
-    runContainerService.exec("", imageConfigurationRaw)
+
+    var imageConfigurationObj = JSON.parse(imageConfigurationRaw) || {}
+    var containerName = imageConfigurationObj.Name || ""
+
+    runContainerService.exec(containerName, imageConfigurationRaw)
 })
