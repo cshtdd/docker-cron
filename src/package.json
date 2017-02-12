@@ -5,21 +5,19 @@
   "scripts": {
     "pretest": "npm i",
     "test": "jasmine",
-
     "prelist": "npm i",
     "list": "node npm-cmd-list-containers.js",
     "prepull": "npm i",
     "pull": "node npm-cmd-pull-image.js",
-
     "prerun": "npm i",
     "run": "node npm-cmd-run-container.js",
-
     "precron": "npm i",
     "cron": "node npm-cmd-run-cron.js"
   },
   "dependencies": {
     "curlrequest": "^1.0.1",
     "jasmine": "^2.5.3",
-    "rfr": "^1.2.3"
+    "rfr": "^1.2.3",
+    "the-promise-factory": "^1.0.0"
   }
 }
