@@ -1,4 +1,6 @@
-var curl = require('curlrequest')
+var rfr = require("rfr")
+var dockerApi = rfr("dockerApi")
+
 
 console.log("Downloading image")
 
@@ -10,15 +12,7 @@ if (!imageName.length){
 
 console.log("ImageName", imageName)
 
-
-curl.request({
-    "unix-socket": "/var/run/docker.sock",
-    url: 'http:/v1.25/images/create?fromImage=' + imageName,
-    method: "POST",
-    verbose: true,
-    headers: {"Content-Type": "application/json"},
-    include: true
-}, function(err, parts) {
+dockerApi.pullImage(imageName, function(err, parts) {
     if (err) throw err;
     console.log("RESPONSE")
     console.log(parts)

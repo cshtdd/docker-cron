@@ -1,6 +1,6 @@
 var rfr = require("rfr")
-var envMapper = rfr("envMapper.js")
-var curl = require('curlrequest')
+var envMapper = rfr("envMapper")
+var dockerApi = rfr("dockerApi")
 
 module.exports = {
     exec: function(containerName, imageConfigurationRaw){
@@ -24,15 +24,10 @@ module.exports = {
             //TODO: put here to make the tests pass. Remove it 
             // console.log(process.env)
 
-            curl.request({
-                "unix-socket": "/var/run/docker.sock",
-                url: `http:/v1.26/containers/create?name=${name}`,
-                method: "POST",
-                verbose: true,
-                headers: {"Content-Type": "application/json"},
-                data: containerData
-            }, function(err, parts) {
-                if (err) throw err
+            dockerApi.create(name, containerData, function(err, parts) {
+                if (err) {
+                    throw err
+                }
                 // console.log("RESPONSE")
                 // console.log(parts)
 
@@ -43,14 +38,7 @@ module.exports = {
 
                 console.log("Starting container ", containerId)
 
-                curl.request({
-                    "unix-socket": "/var/run/docker.sock",
-                    url: `http:/v1.26/containers/${containerId}/start`,
-                    method: "POST",
-                    verbose: true,
-                    headers: {"Content-Type": "application/json"},
-                    include: true
-                }, function(err, parts){
+                dockerApi.start(containerId, function(err, parts){
                     if (err) throw err;
                     console.log("RESPONSE")
                     console.log(parts)
@@ -60,13 +48,10 @@ module.exports = {
             })
         }
 
-        curl.request({
-            "unix-socket": "/var/run/docker.sock",
-            url: 'http:/v1.25/containers/json?all=true',
-            verbose: true,
-            headers: {"Content-Type": "application/json"}
-        }, function(err, parts) {
-            if (err) throw err;
+        dockerApi.list(true, function(err, parts) {
+            if (err) {
+                throw err
+            }
             // console.log("RESPONSE")
             // console.log(parts)
 
@@ -80,13 +65,7 @@ module.exports = {
                 console.log(`Container ${containerName} Already Exist`)
 
                 console.log("Delete Container ", existingContainer.Id)
-                curl.request({
-                    "unix-socket": "/var/run/docker.sock",
-                    url: `http:/v1.26/containers/${existingContainer.Id}?force=true`,
-                    method: "DELETE",
-                    verbose: true,
-                    headers: {"Content-Type": "application/json"}
-                }, function(err, parts){
+                dockerApi.delete(existingContainer.Id, true, function(err, parts){
                     if (err) throw err
 
                     createContainerWithName(containerName, imageConfiguration)
@@ -96,6 +75,5 @@ module.exports = {
                 createContainerWithName(containerName, imageConfiguration)
             }
         })
-
     }
 }
