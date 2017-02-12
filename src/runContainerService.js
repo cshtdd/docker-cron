@@ -1,6 +1,7 @@
 var rfr = require("rfr")
 var envMapper = rfr("envMapper")
 var dockerApi = rfr("dockerApiPromise")
+var createContainerService = rfr("createContainerService")
 
 module.exports = {
     exec: function(containerName, imageConfigurationRaw){
@@ -19,35 +20,6 @@ module.exports = {
 
         console.log("Read all containers")
 
-        function createContainerWithName(name, containerData){
-            console.log("Create container ", name)
-
-            dockerApi.create(name, containerData)
-                .then(parts => {
-                    // console.log("RESPONSE")
-                    // console.log(parts)
-
-                    var containerInfo = JSON.parse(parts)
-                    var containerId = containerInfo.Id
-                    // console.log(containerInfo)
-                    // console.log(containerId)
-
-                    console.log("Starting container ", containerId)
-
-                    dockerApi.start(containerId)
-                        .then(parts => {
-                            console.log("RESPONSE")
-                            console.log(parts)
-
-                            console.log("Completed")
-                        }, err => {
-                            throw err
-                        })
-                }, err => {
-                    throw err
-                })
-        }
-
         dockerApi.list(true)
             .then(parts => {
                 // console.log("RESPONSE")
@@ -65,13 +37,13 @@ module.exports = {
                     console.log("Delete Container ", existingContainer.Id)
                     dockerApi.delete(existingContainer.Id, true)
                         .then(parts => {
-                            createContainerWithName(containerName, imageConfiguration)
+                            createContainerService.exec(containerName, imageConfiguration)
                         }, err => {
                             throw err
                         })
                 }
                 else {
-                    createContainerWithName(containerName, imageConfiguration)
+                    createContainerService.exec(containerName, imageConfiguration)
                 }
             }, err => {
                 throw err
