@@ -1,7 +1,5 @@
 FROM camilin87/node-cron:latest
 
-RUN apt-get update && apt-get install curl -y
-
 RUN mkdir -p /usr/src/app
 COPY . /usr/src/app
 
