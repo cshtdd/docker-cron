@@ -44,8 +44,8 @@ end
 
 task :build_container do
     Dir.chdir('src') do
-      sh "docker build -f Dockerfile-api-test -t camilin87/docker-cron-api-test ."
-      sh "docker build -f Dockerfile-docker-cron -t camilin87/docker-cron ."
+      sh "docker build --no-cache -f Dockerfile-api-test -t camilin87/docker-cron-api-test ."
+      sh "docker build --no-cache -f Dockerfile-docker-cron -t camilin87/docker-cron ."
     end
 end
 
