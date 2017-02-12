@@ -17,4 +17,12 @@ describe "pull" do
 
         expect(`docker image ls alpine:latest`).to include("alpine")
     end
+
+    it "fails pulling an unknown image" do
+        expect(`rake run[pull,"camilin87/notfound"]`).to include("camilin87/notfound not found")
+    end
+
+    it "fails when no image is specified" do
+        expect(`rake run[pull]`).to include("Error")
+    end
 end

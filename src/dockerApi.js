@@ -10,6 +10,13 @@ function apiRequest(data, callback){
 
 module.exports = {
     pullImage: (name, callback) => {
+        if (!name){
+            callback(new Error("imageName argument missing"))
+            return
+        }
+
+        console.log("ImageName", name)
+
         apiRequest({
             url: `http:/v1.25/images/create?fromImage=${name}`,
             method: "POST",
