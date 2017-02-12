@@ -1,15 +1,15 @@
 var rfr = require("rfr")
-var dockerApi = rfr("dockerApi")
+var dockerApi = rfr("dockerApiPromise")
 
 console.log("List containers")
 
-dockerApi.list(false, function(err, parts) {
-    if (err) {
+dockerApi
+    .list(false)
+    .then(parts => {
+        console.log("RESPONSE")
+        console.log(parts)
+
+        console.log("Completed")
+    }, err => {
         throw err
-    }
-
-    console.log("RESPONSE")
-    console.log(parts)
-
-    console.log("Completed")
-})
+    })
