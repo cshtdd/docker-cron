@@ -20,33 +20,31 @@ module.exports = {
 
         console.log("Read all containers")
 
-        dockerApi.list(true)
-            .then(parts => {
-                // console.log("RESPONSE")
-                // console.log(parts)
+        dockerApi.list(true).then(parts => {
+            // console.log("RESPONSE")
+            // console.log(parts)
 
-                var allContainerInfo = JSON.parse(parts)
-                // console.log(allContainerInfo)
+            var allContainerInfo = JSON.parse(parts)
+            // console.log(allContainerInfo)
 
-                var existingContainer = allContainerInfo
-                    .find((x) => x.Names.find((n) => n == `/${containerName}`))
+            var existingContainer = allContainerInfo
+                .find((x) => x.Names.find((n) => n == `/${containerName}`))
 
-                if (existingContainer){
-                    console.log(`Container ${containerName} Already Exist`)
+            if (existingContainer){
+                console.log(`Container ${containerName} Already Exist`)
 
-                    console.log("Delete Container ", existingContainer.Id)
-                    dockerApi.delete(existingContainer.Id, true)
-                        .then(parts => {
-                            createContainerService.exec(containerName, imageConfiguration)
-                        }, err => {
-                            throw err
-                        })
-                }
-                else {
+                console.log("Delete Container ", existingContainer.Id)
+                dockerApi.delete(existingContainer.Id, true).then(parts => {
                     createContainerService.exec(containerName, imageConfiguration)
-                }
-            }, err => {
-                throw err
-            })
+                }, err => {
+                    throw err
+                })
+            }
+            else {
+                createContainerService.exec(containerName, imageConfiguration)
+            }
+        }, err => {
+            throw err
+        })
     }
 }
