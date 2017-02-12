@@ -1,5 +1,5 @@
 var rfr = require("rfr")
-var dockerApi = rfr("dockerApiPromise")
+var dockerApi = rfr("utils/dockerApiPromise")
 
 module.exports = {
     exec: (name, containerData) => {

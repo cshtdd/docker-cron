@@ -1,7 +1,7 @@
 var rfr = require("rfr")
-var envMapper = rfr("envMapper")
-var dockerApi = rfr("dockerApiPromise")
-var createContainerService = rfr("createContainerService")
+var envMapper = rfr("utils/envMapper")
+var dockerApi = rfr("utils/dockerApiPromise")
+var createContainerService = rfr("services/createContainer")
 
 module.exports = {
     exec: function(containerName, imageConfigurationRaw){

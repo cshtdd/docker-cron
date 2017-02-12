@@ -1,5 +1,5 @@
 var rfr = require("rfr")
-var envMapper = rfr("envMapper.js")
+var envMapper = rfr("utils/envMapper")
 
 describe("envMapper", () => {
     it("returns an empty array by default", () => {

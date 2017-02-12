@@ -1,5 +1,5 @@
 var rfr = require("rfr")
-var runContainerService = rfr("runContainerService.js")
+var runContainerService = rfr("services/runContainer")
 
 // console.log("Run Container", process.argv)
 console.log("Run Container")

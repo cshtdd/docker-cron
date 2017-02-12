@@ -1,6 +1,6 @@
 var rfr = require("rfr")
 var promise = require("the-promise-factory")
-var dockerApi = rfr("dockerApi")
+var dockerApi = rfr("utils/dockerApi")
 
 function apiCallback(fulfill, reject){
     return (err, data) => {
