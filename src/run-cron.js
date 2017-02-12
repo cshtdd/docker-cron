@@ -10,6 +10,8 @@ fs.readFile("/usr/src/containerInfo.json", "utf8",  (err, imageConfigurationRaw)
     // console.log(err)
     // console.log(imageConfigurationRaw)
 
-    if (err) throw err;
+    if (err) {
+        throw err
+    }
     runContainerService.exec("", imageConfigurationRaw)
 })
