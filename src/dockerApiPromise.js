@@ -24,5 +24,23 @@ module.exports = {
         return promise.create((fulfill, reject) => {
             dockerApi.list(all, apiCallback(fulfill, reject))
         })
+    },
+
+    create: (name, data) => {
+        return promise.create((fulfill, reject) => {
+            dockerApi.create(name, data, apiCallback(fulfill, reject))
+        })
+    },
+
+    start: (containerId) => {
+        return promise.create((fulfill, reject) => {
+            dockerApi.start(containerId, apiCallback(fulfill, reject))
+        })
+    },
+
+    delete: (containerId, force) => {
+        return promise.create((fulfill, reject) => {
+            dockerApi.delete(containerId, force, apiCallback(fulfill, reject))
+        })
     }
 }
