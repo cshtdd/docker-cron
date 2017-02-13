@@ -1,7 +1,17 @@
 # Docker-Cron  
 Container to run other containers as cron jobs  
 
-## Dev Requirements  
+## Usage  
+
+TODO: finish this up
+
+### Environment variables  
+
+    DOCKER_CRON_DEBUG_LOG_ENABLED=1
+
+## Dev  
+
+### Requirements  
 - Docker
 - node
 - rake
@@ -9,11 +19,11 @@ Container to run other containers as cron jobs
 - rspec
     `gem install rspec`
 
-## Building the Container  
+### Building the Container  
 
     rake build_container
 
-## Running the script in the container  
+### Running the script in the container  
 
     # the following command translates to
     #    npm run list
