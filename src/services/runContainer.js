@@ -1,10 +1,13 @@
 var rfr = require("rfr")
+var logHelper = rfr("utils/logHelper")
 var envMapper = rfr("utils/envMapper")
 var dockerApi = rfr("utils/dockerApiPromise")
 var createContainerService = rfr("services/createContainer")
 
 module.exports = {
     exec: function(containerName, imageConfigurationRaw){
+        if (logHelper.isDebug()) console.log("DEBUG Run-Container")
+
         if (!imageConfigurationRaw.length){
             throw new Error("imageConfigurationRaw argument missing")
         }
