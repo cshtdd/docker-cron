@@ -1,4 +1,5 @@
 var rfr = require("rfr")
+var logHelper = rfr("utils/logHelper")
 var dockerApi = rfr("utils/dockerApiPromise")
 
 module.exports = {
@@ -14,13 +15,15 @@ module.exports = {
             console.log("Create container ", name)
 
             dockerApi.create(name, containerData).then(parts => {
-                // console.log("RESPONSE")
-                // console.log(parts)
+                if (logHelper.isDebug()) console.log("DEBUG Create.Response=", parts)
 
                 var containerInfo = JSON.parse(parts)
                 var containerId = containerInfo.Id
-                // console.log(containerInfo)
-                // console.log(containerId)
+
+                if (logHelper.isDebug()) {
+                    console.log("DEBUG containerInfo=", containerInfo)
+                    console.log("DEBUG containerId=", containerId)
+                }
 
                 console.log("Starting container ", containerId)
 

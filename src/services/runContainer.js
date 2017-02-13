@@ -6,29 +6,28 @@ var createContainerService = rfr("services/createContainer")
 
 module.exports = {
     exec: function(containerName, imageConfigurationRaw){
-        if (logHelper.isDebug()) console.log("DEBUG Run-Container")
+        if (logHelper.isDebug()) {
+            console.log("DEBUG Run-Container")
+            console.log("DEBUG ContainerName=", containerName)
+            console.log("DEBUG imageConfigurationRaw=", imageConfigurationRaw)
+        }
 
         if (!imageConfigurationRaw.length){
             throw new Error("imageConfigurationRaw argument missing")
         }
-
-        // console.log("ImageConfigurationRaw", imageConfigurationRaw)
 
         var imageConfigurationObj = JSON.parse(imageConfigurationRaw)
         imageConfigurationObj.Env = imageConfigurationObj.Env || []
         imageConfigurationObj.Env = envMapper.copy(imageConfigurationObj.Env)
         var imageConfiguration = JSON.stringify(imageConfigurationObj)
 
-        // console.log("ImageConfiguration", imageConfiguration)
+        if (logHelper.isDebug()) console.log("DEBUG ImageConfiguration=", imageConfiguration)
 
         console.log("Read all containers")
 
         dockerApi.list(true).then(parts => {
-            // console.log("RESPONSE")
-            // console.log(parts)
-
             var allContainerInfo = JSON.parse(parts)
-            // console.log(allContainerInfo)
+            if (logHelper.isDebug()) console.log("DEBUG allContainerInfo=", allContainerInfo)
 
             var existingContainer = allContainerInfo
                 .find((x) => x.Names.find((n) => n == `/${containerName}`))

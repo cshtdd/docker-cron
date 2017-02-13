@@ -1,3 +1,5 @@
+var rfr = require("rfr")
+var logHelper = rfr("utils/logHelper")
 var curl = require('curlrequest')
 
 function apiRequest(data, callback){
@@ -8,8 +10,20 @@ function apiRequest(data, callback){
     curl.request(data, callback)
 }
 
+function handleResponse(callback){
+    return (err, data) => {
+        if (logHelper.isDebug()){
+            console.log("DEBUG DockerApi.Response err=", err)
+            console.log("DEBUG DockerApi.Response data=", data)
+        }
+        callback(err, data)
+    }
+}
+
 module.exports = {
     pullImage: (name, callback) => {
+        if (logHelper.isDebug()) console.log("DEBUG DockerApi.pullImage name=", name)
+
         if (!name){
             callback(new Error("imageName argument missing"))
             return
@@ -21,10 +35,12 @@ module.exports = {
             url: `http:/v1.25/images/create?fromImage=${name}`,
             method: "POST",
             include: true
-        }, callback)
+        }, handleResponse(callback))
     },
 
     list: (all, callback) => {
+        if (logHelper.isDebug()) console.log("DEBUG DockerApi.list all=", all)
+
         var allParam = ""
         if (all){
             allParam = "?all=true"
@@ -32,10 +48,12 @@ module.exports = {
 
         apiRequest({
             url: `http:/v1.25/containers/json${allParam}`
-        }, callback)
+        }, handleResponse(callback))
     },
 
     create: (name, data, callback) => {
+        if (logHelper.isDebug()) console.log("DEBUG DockerApi.create name=", name, "data=", data)
+
         var nameArg = ""
         if (name){
             nameArg = `name=${name}`
@@ -45,18 +63,22 @@ module.exports = {
             url: `http:/v1.26/containers/create?${nameArg}`,
             method: "POST",
             data: data
-        }, callback)
+        }, handleResponse(callback))
     },
 
     start: (containerId, callback) => {
+        if (logHelper.isDebug()) console.log("DEBUG DockerApi.start containerId=", containerId)
+
         apiRequest({
             url: `http:/v1.26/containers/${containerId}/start`,
             method: "POST",
             include: true
-        }, callback)
+        }, handleResponse(callback))
     },
 
     delete: (containerId, force, callback) => {
+        if (logHelper.isDebug()) console.log("DEBUG DockerApi.delete containerId=", containerId)
+
         var forceParam = ""
         if (force){
             forceParam = "force=true"
@@ -65,6 +87,6 @@ module.exports = {
         apiRequest({
             url: `http:/v1.26/containers/${containerId}?${forceParam}`,
             method: "DELETE"
-        }, callback)
+        }, handleResponse(callback))
     }
 }
