@@ -16,7 +16,10 @@ end
 
 def sh(command)
     puts "sh #{command}"
-    system(command)
+    command_output = `#{command}`
+    puts command_output
+    raise "Error Running Command" unless $?.success?
+    command_output
 end
 
 def run_nameless_container(container_info)
