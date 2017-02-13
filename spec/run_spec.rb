@@ -41,7 +41,10 @@ describe "run" do
         run_nameless_container %{
             {
                 "Image": "alpine",
-                "Cmd": "echo test"
+                "Cmd": [
+                    "echo",
+                    "test"
+                ]
             }
         }
 

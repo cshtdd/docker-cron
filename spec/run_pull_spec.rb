@@ -20,7 +20,10 @@ describe "run" do
         run %{
             {
                 "Image": "alpine",
-                "Cmd": "echo test"
+                "Cmd": [
+                    "echo",
+                    "test"
+                ]
             }
         }
 
