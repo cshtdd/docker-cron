@@ -54,3 +54,4 @@ The cron container behavior can be tweaked with the following environment variab
 - [Container to run Node cron jobs](https://github.com/camilin87/node-cron)  
 - [Curl and the Docker Api](https://nathanleclaire.com/blog/2015/11/12/using-curl-and-the-unix-socket-to-talk-to-the-docker-api/)  
 - [Docker Engine Api](https://docs.docker.com/engine/api/v1.25/)  
+    [Docker 1.12 uses the 1.24 Api version](https://docs.docker.com/engine/api/v1.24/)  
