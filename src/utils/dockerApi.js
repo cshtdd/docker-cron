@@ -6,6 +6,8 @@ function apiRequest(data, callback){
     data.verbose = true
     data.headers = {"Content-Type": "application/json"}
     data["unix-socket"] = "/var/run/docker.sock"
+    data.url = `http:/v1.24/${data.endpoint}`
+    delete data.endpoint
 
     curl.request(data, callback)
 }
@@ -32,7 +34,7 @@ module.exports = {
         console.log("ImageName", name)
 
         apiRequest({
-            url: `http:/v1.24/images/create?fromImage=${name}`,
+            endpoint: `images/create?fromImage=${name}`,
             method: "POST",
             include: true
         }, handleResponse(callback))
@@ -47,7 +49,7 @@ module.exports = {
         }
 
         apiRequest({
-            url: `http:/v1.24/containers/json${allParam}`
+            endpoint: `containers/json${allParam}`
         }, handleResponse(callback))
     },
 
@@ -60,7 +62,7 @@ module.exports = {
         }
 
         apiRequest({
-            url: `http:/v1.24/containers/create?${nameArg}`,
+            endpoint: `containers/create?${nameArg}`,
             method: "POST",
             data: data
         }, handleResponse(callback))
@@ -70,7 +72,7 @@ module.exports = {
         if (logHelper.isDebug()) console.log("DEBUG DockerApi.start containerId=", containerId)
 
         apiRequest({
-            url: `http:/v1.24/containers/${containerId}/start`,
+            endpoint: `containers/${containerId}/start`,
             method: "POST",
             include: true
         }, handleResponse(callback))
@@ -85,7 +87,7 @@ module.exports = {
         }
 
         apiRequest({
-            url: `http:/v1.24/containers/${containerId}?${forceParam}`,
+            endpoint: `containers/${containerId}?${forceParam}`,
             method: "DELETE"
         }, handleResponse(callback))
     }
