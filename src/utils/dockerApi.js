@@ -32,7 +32,7 @@ module.exports = {
         console.log("ImageName", name)
 
         apiRequest({
-            url: `http:/v1.25/images/create?fromImage=${name}`,
+            url: `http:/v1.24/images/create?fromImage=${name}`,
             method: "POST",
             include: true
         }, handleResponse(callback))
@@ -47,7 +47,7 @@ module.exports = {
         }
 
         apiRequest({
-            url: `http:/v1.25/containers/json${allParam}`
+            url: `http:/v1.24/containers/json${allParam}`
         }, handleResponse(callback))
     },
 
@@ -60,7 +60,7 @@ module.exports = {
         }
 
         apiRequest({
-            url: `http:/v1.26/containers/create?${nameArg}`,
+            url: `http:/v1.24/containers/create?${nameArg}`,
             method: "POST",
             data: data
         }, handleResponse(callback))
@@ -70,7 +70,7 @@ module.exports = {
         if (logHelper.isDebug()) console.log("DEBUG DockerApi.start containerId=", containerId)
 
         apiRequest({
-            url: `http:/v1.26/containers/${containerId}/start`,
+            url: `http:/v1.24/containers/${containerId}/start`,
             method: "POST",
             include: true
         }, handleResponse(callback))
@@ -85,7 +85,7 @@ module.exports = {
         }
 
         apiRequest({
-            url: `http:/v1.26/containers/${containerId}?${forceParam}`,
+            url: `http:/v1.24/containers/${containerId}?${forceParam}`,
             method: "DELETE"
         }, handleResponse(callback))
     }
