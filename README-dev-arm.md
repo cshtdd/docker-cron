@@ -21,9 +21,9 @@ docker login
 ## Build the image  
 
 ```bash
-pushd src
-docker build -f Dockerfile-docker-cron-arm32v6 -t camilin87/docker-cron-arm32v6 .
-popd
+pushd src && \
+  docker build -f Dockerfile-docker-cron-arm32v6 -t camilin87/docker-cron-arm32v6 . && \
+  popd
 ```
 
 ## Publish the image  
