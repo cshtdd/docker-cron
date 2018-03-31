@@ -22,7 +22,7 @@ docker login
 
 ```bash
 pushd src
-docker build -f Dockerfile-arm32v6 -t camilin87/docker-cron-arm32v6 .
+docker build -f Dockerfile-docker-cron-arm32v6 -t camilin87/docker-cron-arm32v6 .
 popd
 ```
 
